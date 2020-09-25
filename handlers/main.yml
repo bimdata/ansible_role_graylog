@@ -1,0 +1,5 @@
+---
+- name: "Restart Graylog."
+  service:
+    name: "{{ graylog_svc_name }}"
+    state: restarted

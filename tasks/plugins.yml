@@ -1,0 +1,15 @@
+---
+- name: "Ensure plugin directory existence."
+  file:
+    path: "{{ graylog_plugin_dir }}"
+    state: directory
+    mode: 0755
+
+- name: "Download .jar."
+  get_url:
+    url: "{{ item.url }}"
+    dest: "{{ graylog_plugin_dir }}"
+    checksum: "{{ item.checksum | default(omit) }}"
+    mode: 0644
+  loop: "{{ graylog_plugins }}"
+  notify: "Restart Graylog."
