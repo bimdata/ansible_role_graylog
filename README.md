@@ -27,7 +27,10 @@ You need to define at least two variables :
 `pwgen -N 1 -s 96` or `tr -cd '[:alnum:]' < /dev/urandom | fold -w96 | head -n1`
 * `graylog_root_password_sha2`: you should generate its content with the command:
 `echo -n your_password | shasum -a 256` (You need to replace 'your_password' by
-an actual password!)
+an actual password!)  
+Or you can use Ansible `hash()` function:
+`graylog_root_password_sha2: "{{ vault_graylog_root_password | hash('sha256') }}"`.
+
 
 This role supports the installation of plugins too. Plugins need to be `.jar` files,
 and the managed hosts must be able to download them. The checksum is optional and work
