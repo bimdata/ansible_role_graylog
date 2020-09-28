@@ -86,4 +86,4 @@ MIT
 Author Information
 ------------------
 
-[Bimdata.io](https://bimdata.io/)
+[BIMData.io](https://bimdata.io/)
