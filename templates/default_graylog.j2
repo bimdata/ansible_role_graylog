@@ -1,0 +1,14 @@
+{{ ansible_managed | comment }}
+
+# Path to the java executable.
+JAVA={{ graylog_java_path }}
+
+# Default Java options for heap and garbage collection.
+GRAYLOG_SERVER_JAVA_OPTS="{{ graylog_java_opts }}"
+
+# Pass some extra args to graylog-server. (i.e. "-d" to enable debug mode)
+GRAYLOG_SERVER_ARGS="{{ graylog_custom_args }}"
+
+# Program that will be used to wrap the graylog-server command. Useful to
+# support programs like authbind.
+GRAYLOG_COMMAND_WRAPPER="{{ graylog_command_wrapper }}"

@@ -1,0 +1,78 @@
+---
+- name: "Check Graylog configuration."
+  include_tasks: check-configuration.yml
+
+- name: "Install Graylog prerequisites."
+  apt:
+    name: "{{ graylog_prerequisites }}"
+    state: present
+
+- name: "Create a temporary file ton save Graylog .deb."
+  tempfile:
+    state: file
+    prefix: graylog_
+    suffix: .deb
+  register: graylog_tmp_file
+  changed_when: false
+
+- name: "Get Graylog .deb (repos url + keyring installation)."
+  get_url:
+    url: "{{ graylog_repos_deb_url }}"
+    dest: "{{ graylog_tmp_file.path }}"
+    force: true
+  changed_when: false
+
+- name: "Install Graylog repository + keyring."
+  apt:
+    deb: "{{ graylog_tmp_file.path }}"
+    state: present
+    dpkg_options: force-all
+
+- name: "Remove temporary Graylog .deb file."
+  file:
+    path: "{{ graylog_tmp_file.path }}"
+    state: absent
+  changed_when: false
+
+- name: "Install Graylog"
+  apt:
+    name: "{{ graylog_pkg_name }}"
+    state: present
+    update_cache: true
+
+- name: "Install Graylog integrations plugins."
+  apt:
+    name: "{{ graylog_intagration_pkg_name }}"
+    state: present
+    cache_valid_time: 3600
+  when: graylog_install_integration
+
+- name: "Install Graylog enterprise plugins."
+  apt:
+    name: "{{ graylog_enterprise_pkg_name }}"
+    cache_valid_time: 3600
+  when: graylog_install_enterprise
+
+- name: "Enable Graylog service."
+  service:
+    name: "{{ graylog_svc_name }}"
+    enabled: true
+
+- name: "Configure Graylog java default values."
+  template:
+    src: default_graylog.j2
+    dest: /etc/default/graylog
+    mode: 0644
+  notify: "Restart Graylog."
+
+- name: "Configure Graylog."
+  template:
+    src: graylog-server.conf.j2
+    dest: /etc/graylog/server/server.conf
+    owner: graylog
+    group: graylog
+    mode: 0640
+  notify: "Restart Graylog."
+
+- name: "Install Graylog plugins."
+  include_tasks: plugins.yml

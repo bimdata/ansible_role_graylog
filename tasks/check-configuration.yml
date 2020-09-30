@@ -1,0 +1,43 @@
+---
+- name: "Check if graylog_password_secret is set."
+  assert:
+    that:
+      - graylog_password_secret is defined
+      - graylog_password_secret | length > 0
+    fail_msg: >
+      You need to set 'graylog_password_secret' variable.
+      You can generate this value with the command `pwgen -N 1 -s 96`."
+    quiet: true
+
+- name: "Check if graylog_root_password_sha2 is set."
+  assert:
+    that:
+      - graylog_root_password_sha2 is defined
+      - graylog_root_password_sha2 | length > 0
+    fail_msg: >
+      You need to set 'graylog_root_password_sha2' variable.
+      You can generate this value with the command `echo -n yourpassword | shasum -a 256`.
+    quiet: true
+
+- name: "Check TLS configuration."
+  assert:
+    that:
+      - graylog_http_tls_cert_file is defined
+      - graylog_http_tls_key_file is defined
+      - graylog_http_tls_cert_file | length > 0
+      - graylog_http_tls_key_file | length > 0
+    fail_msg: >
+      You need to configure 'graylog_http_tls_cert_file' and 'graylog_http_tls_key_file'
+      when 'graylog_http_enable_tls' is true."
+    quiet: true
+  when: graylog_http_enable_tls
+
+- name: "Check mail confituration."
+  assert:
+    that:
+      - not graylog_transport_email_use_ssl
+    fail_msg: >
+      You can't have 'graylog_transport_email_use_tls' and 'graylog_transport_email_use_ssl' true in the same time.
+      Use_TLS enable STARTTLS, use_ssl enable classic SSL/TLS mode.
+    quiet: true
+  when: graylog_transport_email_use_tls
