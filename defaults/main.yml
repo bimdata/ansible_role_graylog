@@ -6,7 +6,7 @@ graylog_prerequisites:
   - gnupg
   - default-jre-headless
 
-graylog_version: 3.3
+graylog_version: 4.0
 graylog_repos_deb_url: "https://packages.graylog2.org/repo/packages/graylog-{{ graylog_version }}-repository_latest.deb"
 graylog_pkg_name: graylog-server
 graylog_svc_name: graylog-server
