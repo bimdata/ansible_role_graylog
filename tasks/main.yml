@@ -36,9 +36,10 @@
 
 - name: "Install Graylog"
   apt:
-    name: "{{ graylog_pkg_name }}"
+    name: "{{ graylog_pkg_name }}{% if graylog_version is defined %}={{ graylog_version }}*{% endif %}"
     state: present
     update_cache: true
+  notify: "Restart Graylog."
 
 - name: "Install Graylog integrations plugins."
   apt:
