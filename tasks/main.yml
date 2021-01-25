@@ -14,6 +14,7 @@
     suffix: .deb
   register: graylog_tmp_file
   changed_when: false
+  when: not ansible_check_mode
 
 - name: "Get Graylog .deb (repos url + keyring installation)."
   get_url:
@@ -21,18 +22,21 @@
     dest: "{{ graylog_tmp_file.path }}"
     force: true
   changed_when: false
+  when: not ansible_check_mode
 
 - name: "Install Graylog repository + keyring."
   apt:
     deb: "{{ graylog_tmp_file.path }}"
     state: present
     dpkg_options: force-all
+  when: not ansible_check_mode
 
 - name: "Remove temporary Graylog .deb file."
   file:
     path: "{{ graylog_tmp_file.path }}"
     state: absent
   changed_when: false
+  when: not ansible_check_mode
 
 - name: "Install Graylog"
   apt:
