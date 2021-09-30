@@ -4,10 +4,13 @@
 JAVA={{ graylog_java_path }}
 
 # Default Java options for heap and garbage collection.
-GRAYLOG_SERVER_JAVA_OPTS="{{ graylog_java_opts }}"
+GRAYLOG_SERVER_JAVA_OPTS="{{ graylog_java_opts_1 }}"
+
+# Avoid endless loop with some TLSv1.3 implementations.
+GRAYLOG_SERVER_JAVA_OPTS="{{ graylog_java_opts_2 }}"
 
 # Pass some extra args to graylog-server. (i.e. "-d" to enable debug mode)
-GRAYLOG_SERVER_ARGS="{{ graylog_custom_args }}"
+GRAYLOG_SERVER_ARGS="{{ graylog_server_args }}"
 
 # Program that will be used to wrap the graylog-server command. Useful to
 # support programs like authbind.

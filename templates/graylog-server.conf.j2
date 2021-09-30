@@ -649,6 +649,30 @@ content_packs_loader_enabled = {{ graylog_content_packs_loader_enabled }}
 # Default: TLSv1.2,TLSv1.3
 enabled_tls_protocols = {{ graylog_enabled_tls_protocols }}
 
+# Enable Prometheus exporter HTTP server.
+# Default: false
+prometheus_exporter_enabled = {{ graylog_prometheus_exporter_enabled }}
+
+# IP address and port for the Prometheus exporter HTTP server.
+# Default: 127.0.0.1:9833
+prometheus_exporter_bind_address = {{ graylog_prometheus_exporter_bind_address }}
+
+# Path to the Prometheus exporter core mapping file. If this option is enabled, the full built-in core mapping is
+# replaced with the mappings in this file.
+# This file is monitored for changes and updates will be applied at runtime.
+# Default: none
+{% if graylog_prometheus_exporter_mapping_file_path_core | length %}prometheus_exporter_mapping_file_path_core = {{ graylog_prometheus_exporter_mapping_file_path_core }}{% endif %}
+
+# Path to the Prometheus exporter custom mapping file. If this option is enabled, the mappings in this file are
+# configured in addition to the built-in core mappings. The mappings in this file cannot overwrite any core mappings.
+# This file is monitored for changes and updates will be applied at runtime.
+# Default: none
+{% if graylog_prometheus_exporter_mapping_file_path_custom | length %}prometheus_exporter_mapping_file_path_custom = {{ graylog_prometheus_exporter_mapping_file_path_custom }}{% endif %}
+
+# Configures the refresh interval for the monitored Prometheus exporter mapping files.
+# Default: 60s
+prometheus_exporter_mapping_file_refresh_interval = {{ graylog_prometheus_exporter_mapping_file_refresh_interval }}
+
 # Custom configuration, if some are needed by plugins.
 {% if graylog_custom_config is defined and graylog_custom_config | length > 0 %}
 {% for key, value in graylog_custom_config.items() %}
