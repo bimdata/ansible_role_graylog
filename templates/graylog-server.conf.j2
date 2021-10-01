@@ -150,7 +150,17 @@ trusted_proxies = {{ graylog_trusted_proxies }}
 # Default: http://127.0.0.1:9200
 elasticsearch_hosts = {{ graylog_elasticsearch_hosts }}
 
-# Maximum amount of time to wait for successfull connection to Elasticsearch HTTP port.
+# Maximum number of retries to connect to elasticsearch on boot for the version probe.
+#
+# Default: 0, retry indefinitely with the given delay until a connection could be established
+elasticsearch_version_probe_attempts = {{ graylog_elasticsearch_version_probe_attempts }}
+
+# Waiting time in between connection attempts for elasticsearch_version_probe_attempts
+#
+# Default: 5s
+elasticsearch_version_probe_delay = {{ graylog_elasticsearch_version_probe_delay }}
+
+# Maximum amount of time to wait for successful connection to Elasticsearch HTTP port.
 #
 # Default: 10 Seconds
 elasticsearch_connect_timeout = {{ graylog_elasticsearch_connect_timeout }}
@@ -431,7 +441,7 @@ inputbuffer_ring_size = {{ graylog_inputbuffer_ring_size }}
 inputbuffer_processors = {{ graylog_inputbuffer_processors }}
 inputbuffer_wait_strategy = {{ graylog_inputbuffer_wait_strategy }}
 
-# Enable the disk based message journal.
+# Enable the message journal.
 message_journal_enabled = {{ graylog_message_journal_enabled }}
 
 # The directory which will be used to store the message journal. The directory must be exclusively used by Graylog and
@@ -599,8 +609,8 @@ gc_warning_threshold = {{ graylog_gc_warning_threshold }}
 # Connection timeout for a configured LDAP server (e. g. ActiveDirectory) in milliseconds.
 ldap_connection_timeout = {{ graylog_ldap_connection_timeout }}
 
-# Disable the use of SIGAR for collecting system stats
-disable_sigar = {{ graylog_disable_sigar }}
+# Disable the use of a native system stats collector (currently OSHI)
+disable_native_system_stats_collector = {{ graylog_disable_native_system_stats_collector }}
 
 # The default cache time for dashboard widgets. (Default: 10 seconds, minimum: 1 second)
 dashboard_widget_default_cache_time = {{ graylog_dashboard_widget_default_cache_time }}
