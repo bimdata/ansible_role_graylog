@@ -66,7 +66,7 @@
 - name: "Configure Graylog java default values."
   template:
     src: default_graylog.j2
-    dest: /etc/default/graylog
+    dest: /etc/default/graylog-server
     mode: 0644
   notify: "Restart Graylog."
 
