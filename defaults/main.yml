@@ -9,6 +9,8 @@ graylog_prerequisites:
 graylog_version: 4.1
 graylog_repos_deb_url: "https://packages.graylog2.org/repo/packages/graylog-{{ graylog_version }}-repository_latest.deb"
 graylog_pkg_name: graylog-server
+graylog_pkg_version: ""
+graylog_pkg_version_hold: "{{ graylog_pkg_version | default(False) | ternary(True, False) }}"
 graylog_svc_name: graylog-server
 
 graylog_install_integration: false
@@ -64,6 +66,8 @@ graylog_http_tls_key_password: ""
 # Elasticsearch
 graylog_elasticsearch_disable_version_check: false
 graylog_elasticsearch_hosts: http://127.0.0.1:9200
+graylog_elasticsearch_version_probe_attempts: 0
+graylog_elasticsearch_version_probe_delay: 5s
 graylog_elasticsearch_connect_timeout: 10s
 graylog_elasticsearch_socket_timeout: 60s
 graylog_elasticsearch_idle_timeout: -1s  # Infinity
@@ -193,7 +197,8 @@ graylog_prometheus_exporter_mapping_file_refresh_interval: 60s
 # Others
 graylog_gc_warning_threshold: 1s
 graylog_ldap_connection_timeout: 2000
-graylog_disable_sigar: false
+# Variable was rename, keep it for retro-compatibility
+graylog_disable_native_system_stats_collector: "{{ graylog_disable_sigar | default(false) }}"
 graylog_dashboard_widget_default_cache_time: "10s"
 graylog_proxied_requests_thread_pool_size: 32
 graylog_enabled_tls_protocols: TLSv1.2,TLSv1.3
