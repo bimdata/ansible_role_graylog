@@ -6,7 +6,7 @@ graylog_prerequisites:
   - gnupg
   - default-jre-headless
 
-graylog_version: 4.1
+graylog_version: 4.2
 graylog_repos_deb_url: "https://packages.graylog2.org/repo/packages/graylog-{{ graylog_version }}-repository_latest.deb"
 graylog_pkg_name: graylog-server
 graylog_pkg_version: ""
@@ -202,6 +202,7 @@ graylog_disable_native_system_stats_collector: "{{ graylog_disable_sigar | defau
 graylog_dashboard_widget_default_cache_time: "10s"
 graylog_proxied_requests_thread_pool_size: 32
 graylog_enabled_tls_protocols: TLSv1.2,TLSv1.3
+graylog_allowed_auxiliary_paths: ""
 
 # Plugins
 graylog_plugins_url: []

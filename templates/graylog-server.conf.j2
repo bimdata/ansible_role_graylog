@@ -240,7 +240,7 @@ elasticsearch_use_expect_continue = {{ graylog_elasticsearch_use_expect_continue
 #            to your previous 1.x settings so they will be migrated to the database!
 #            This configuration setting is only used on the first start of Graylog. After that,
 #            index related settings can be changed in the Graylog web interface on the 'System / Indices' page.
-#            Also see http://docs.graylog.org/en/2.3/pages/configuration/index_model.html#index-set-configuration.
+#            Also see https://docs.graylog.org/docs/index-model#index-set-configuration.
 rotation_strategy = {{ graylog_rotation_strategy }}
 
 # (Approximate) maximum number of documents in an Elasticsearch index before a new index
@@ -251,7 +251,7 @@ rotation_strategy = {{ graylog_rotation_strategy }}
 #            to your previous 1.x settings so they will be migrated to the database!
 #            This configuration setting is only used on the first start of Graylog. After that,
 #            index related settings can be changed in the Graylog web interface on the 'System / Indices' page.
-#            Also see http://docs.graylog.org/en/2.3/pages/configuration/index_model.html#index-set-configuration.
+#            Also see https://docs.graylog.org/docs/index-model#index-set-configuration.
 elasticsearch_max_docs_per_index = {{ graylog_elasticsearch_max_docs_per_index }}
 
 # (Approximate) maximum size in bytes per Elasticsearch index on disk before a new index is being created, also see
@@ -262,7 +262,7 @@ elasticsearch_max_docs_per_index = {{ graylog_elasticsearch_max_docs_per_index }
 #            to your previous 1.x settings so they will be migrated to the database!
 #            This configuration setting is only used on the first start of Graylog. After that,
 #            index related settings can be changed in the Graylog web interface on the 'System / Indices' page.
-#            Also see http://docs.graylog.org/en/2.3/pages/configuration/index_model.html#index-set-configuration.
+#            Also see https://docs.graylog.org/docs/index-model#index-set-configurationn.
 elasticsearch_max_size_per_index = {{ graylog_elasticsearch_max_size_per_index }}
 
 # (Approximate) maximum time before a new Elasticsearch index is being created, also see
@@ -280,7 +280,7 @@ elasticsearch_max_size_per_index = {{ graylog_elasticsearch_max_size_per_index }
 #            to your previous 1.x settings so they will be migrated to the database!
 #            This configuration setting is only used on the first start of Graylog. After that,
 #            index related settings can be changed in the Graylog web interface on the 'System / Indices' page.
-#            Also see http://docs.graylog.org/en/2.3/pages/configuration/index_model.html#index-set-configuration.
+#            Also see https://docs.graylog.org/docs/index-model#index-set-configuration.
 elasticsearch_max_time_per_index = {{ graylog_elasticsearch_max_time_per_index }}
 
 # Disable checking the version of Elasticsearch for being compatible with this Graylog release.
@@ -296,7 +296,7 @@ no_retention = {{ graylog_no_retention }}
 #            to your previous 1.x settings so they will be migrated to the database!
 #            This configuration setting is only used on the first start of Graylog. After that,
 #            index related settings can be changed in the Graylog web interface on the 'System / Indices' page.
-#            Also see http://docs.graylog.org/en/2.3/pages/configuration/index_model.html#index-set-configuration.
+#            Also see https://docs.graylog.org/docs/index-model#index-set-configuration.
 elasticsearch_max_number_of_indices = {{ graylog_elasticsearch_max_number_of_indices }}
 
 # Decide what happens with the oldest indices when the maximum number of indices is reached.
@@ -308,7 +308,7 @@ elasticsearch_max_number_of_indices = {{ graylog_elasticsearch_max_number_of_ind
 #            to your previous 1.x settings so they will be migrated to the database!
 #            This configuration setting is only used on the first start of Graylog. After that,
 #            index related settings can be changed in the Graylog web interface on the 'System / Indices' page.
-#            Also see http://docs.graylog.org/en/2.3/pages/configuration/index_model.html#index-set-configuration.
+#            Also see https://docs.graylog.org/docs/index-model#index-set-configuration.
 retention_strategy = {{ graylog_retention_strategy }}
 
 # How many Elasticsearch shards and replicas should be used per index? Note that this only applies to newly created indices.
@@ -316,7 +316,7 @@ retention_strategy = {{ graylog_retention_strategy }}
 #            to your previous settings so they will be migrated to the database!
 #            This configuration setting is only used on the first start of Graylog. After that,
 #            index related settings can be changed in the Graylog web interface on the 'System / Indices' page.
-#            Also see http://docs.graylog.org/en/2.3/pages/configuration/index_model.html#index-set-configuration.
+#            Also see https://docs.graylog.org/docs/index-model#index-set-configuration.
 elasticsearch_shards = {{ graylog_elasticsearch_shards }}
 elasticsearch_replicas = {{ graylog_elasticsearch_replicas }}
 
@@ -326,7 +326,7 @@ elasticsearch_replicas = {{ graylog_elasticsearch_replicas }}
 #            to your previous settings so they will be migrated to the database!
 #            This configuration setting is only used on the first start of Graylog. After that,
 #            index related settings can be changed in the Graylog web interface on the 'System / Indices' page.
-#            Also see http://docs.graylog.org/en/2.3/pages/configuration/index_model.html#index-set-configuration.
+#            Also see https://docs.graylog.org/docs/index-model#index-set-configuration.
 elasticsearch_index_prefix = {{ graylog_elasticsearch_index_prefix }}
 
 # Name of the Elasticsearch index template used by Graylog to apply the mandatory index mapping.
@@ -336,7 +336,7 @@ elasticsearch_index_prefix = {{ graylog_elasticsearch_index_prefix }}
 #            to your previous settings so they will be migrated to the database!
 #            This configuration setting is only used on the first start of Graylog. After that,
 #            index related settings can be changed in the Graylog web interface on the 'System / Indices' page.
-#            Also see http://docs.graylog.org/en/2.3/pages/configuration/index_model.html#index-set-configuration.
+#            Also see https://docs.graylog.org/docs/index-model#index-set-configuration.
 elasticsearch_template_name = {{ graylog_elasticsearch_template_name }}
 
 # Do you want to allow searches with leading wildcards? This can be extremely resource hungry and should only
@@ -356,7 +356,7 @@ allow_highlighting = {{ graylog_allow_highlighting }}
 #            to your previous settings so they will be migrated to the database!
 #            This configuration setting is only used on the first start of Graylog. After that,
 #            index related settings can be changed in the Graylog web interface on the 'System / Indices' page.
-#            Also see http://docs.graylog.org/en/2.3/pages/configuration/index_model.html#index-set-configuration.
+#            Also see https://docs.graylog.org/docs/index-model#index-set-configuration.
 elasticsearch_analyzer = {{ graylog_elasticsearch_analyzer }}
 
 # Global timeout for index optimization (force merge) requests.
@@ -589,7 +589,7 @@ http_write_timeout = {{ graylog_http_write_timeout }}
 #            to your previous settings so they will be migrated to the database!
 #            This configuration setting is only used on the first start of Graylog. After that,
 #            index related settings can be changed in the Graylog web interface on the 'System / Indices' page.
-#            Also see http://docs.graylog.org/en/2.3/pages/configuration/index_model.html#index-set-configuration.
+#            Also see https://docs.graylog.org/docs/index-model#index-set-configuration.
 disable_index_optimization = {{ graylog_disable_index_optimization }}
 
 # Optimize the index down to <= index_optimization_max_num_segments. A higher number may take some load from Elasticsearch
@@ -599,7 +599,7 @@ disable_index_optimization = {{ graylog_disable_index_optimization }}
 #            to your previous settings so they will be migrated to the database!
 #            This configuration setting is only used on the first start of Graylog. After that,
 #            index related settings can be changed in the Graylog web interface on the 'System / Indices' page.
-#            Also see http://docs.graylog.org/en/2.3/pages/configuration/index_model.html#index-set-configuration.
+#            Also see https://docs.graylog.org/docs/index-model#index-set-configuration.
 index_optimization_max_num_segments = {{ graylog_index_optimization_max_num_segments }}
 
 # The threshold of the garbage collection runs. If GC runs take longer than this threshold, a system notification
@@ -682,6 +682,12 @@ prometheus_exporter_bind_address = {{ graylog_prometheus_exporter_bind_address }
 # Configures the refresh interval for the monitored Prometheus exporter mapping files.
 # Default: 60s
 prometheus_exporter_mapping_file_refresh_interval = {{ graylog_prometheus_exporter_mapping_file_refresh_interval }}
+
+# Optional allowed paths for Graylog data files. If provided, certain operations in Graylog will only be permitted
+# if the data file(s) are located in the specified paths (for example, with the CSV File lookup adapter).
+# All subdirectories of indicated paths are allowed by default. This Provides an additional layer of security,
+# and allows administrators to control where in the file system Graylog users can select files from.
+{% if graylog_allowed_auxiliary_paths | length %}allowed_auxiliary_paths = {{ graylog_allowed_auxiliary_paths }}{% endif %}
 
 # Custom configuration, if some are needed by plugins.
 {% if graylog_custom_config is defined and graylog_custom_config | length > 0 %}
