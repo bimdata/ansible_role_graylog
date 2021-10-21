@@ -1,0 +1,26 @@
+---
+- name: "Get installed {{ _pkg_to_install }} version."
+  command: dpkg-query --showformat='${Version}' --show {{ _pkg_to_install }}
+  register: graylog_pkg_installed_version
+  failed_when: false
+  changed_when: false
+  check_mode: false
+
+- name: "Unhold {{ _pkg_to_install }} version."
+  dpkg_selections:
+    name: "{{ _pkg_to_install }}"
+    selection: install
+  when: not graylog_pkg_version_hold or (graylog_pkg_installed_version.stdout and graylog_pkg_installed_version.stdout != graylog_pkg_version)
+
+- name: "Install {{ _pkg_to_install }}"
+  apt:
+    name: "{{ _pkg_to_install }}{% if graylog_pkg_version is defined %}={{ graylog_pkg_version }}*{% endif %}"
+    state: present
+    update_cache: true
+  notify: "Restart Graylog."
+
+- name: "Hold {{ _pkg_to_install }} version."
+  dpkg_selections:
+    name: "{{ _pkg_to_install }}"
+    selection: "hold"
+  when: graylog_pkg_version_hold
