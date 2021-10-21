@@ -11,7 +11,10 @@ graylog_repos_deb_url: "https://packages.graylog2.org/repo/packages/graylog-{{ g
 graylog_pkg_name: graylog-server
 graylog_pkg_version: ""
 graylog_pkg_version_hold: "{{ graylog_pkg_version | default(False) | ternary(True, False) }}"
+
 graylog_svc_name: graylog-server
+graylog_svc_enabled: true
+graylog_svc_state: started
 
 graylog_install_integration: false
 graylog_intagration_pkg_name: "graylog-integrations-plugins"
