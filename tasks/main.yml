@@ -56,10 +56,11 @@
     loop_var: _pkg_to_install
   when: graylog_install_enterprise
 
-- name: "Enable Graylog service."
+- name: "Configure Graylog service."
   service:
     name: "{{ graylog_svc_name }}"
-    enabled: true
+    enabled: "{{ graylog_svc_enabled }}"
+    state: "{{ graylog_svc_state }}"
 
 - name: "Configure Graylog java default values."
   template:

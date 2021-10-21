@@ -2,4 +2,6 @@
 - name: "Restart Graylog."
   service:
     name: "{{ graylog_svc_name }}"
+    daemon_reload: true
     state: restarted
+  when: graylog_svc_state != "stopped"
