@@ -20,7 +20,7 @@ Graylog. All default values are defined in `./defaults/main.yml`, you may want t
 check it.
 We try to keep the same name for the Ansible variable as the name in the Graylog
 configuration file, but with the prefix `graylog_`. You can have more information
-about each parameter in the [Graylog documentation](https://docs.graylog.org/en/latest/pages/configuration/server.conf.html).
+about each parameter in the [Graylog documentation](https://docs.graylog.org/docs/server-conf).
 
 You need to define at least two variables :
 * `graylog_password_secret`: you should generate its content with the command:
