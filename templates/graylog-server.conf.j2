@@ -234,13 +234,24 @@ elasticsearch_compression_enabled = {{ graylog_elasticsearch_compression_enabled
 # Default: true
 elasticsearch_use_expect_continue = {{ graylog_elasticsearch_use_expect_continue }}
 
-# Graylog will use multiple indices to store documents in. You can configured the strategy it uses to determine
+# Graylog will use multiple indices to store documents in. You can configure the strategy it uses to determine
 # when to rotate the currently active write index.
-# It supports multiple rotation strategies:
+# It supports multiple rotation strategies, the default being "count":
 #   - "count" of messages per index, use elasticsearch_max_docs_per_index below to configure
 #   - "size" per index, use elasticsearch_max_size_per_index below to configure
-# valid values are "count", "size" and "time", default is "count"
+#   - "time" interval between index rotations, use elasticsearch_max_time_per_index to configure
+# A strategy may be disabled by specifying the optional enabled_index_rotation_strategies list and excluding that strategy.
+enabled_index_rotation_strategies = {{ graylog_enabled_index_rotation_strategies }}
+
+# Provides a hard upper limit for the retention period of any index set at configuration time.
 #
+# This setting is used to validate the value a user chooses for the maximum number of retained indexes, when configuring
+# an index set. However, it is only in effect, when a time-based rotation strategy is chosen.
+#
+# If a rotation strategy other than time-based is selected and/or no value is provided for this setting, no upper limit
+# for index retention will be enforced. This is also the default.
+# max_index_retention_period = P90d
+
 # ATTENTION: These settings have been moved to the database in 2.0. When you upgrade, make sure to set these
 #            to your previous 1.x settings so they will be migrated to the database!
 #            This configuration setting is only used on the first start of Graylog. After that,
@@ -287,6 +298,13 @@ elasticsearch_max_size_per_index = {{ graylog_elasticsearch_max_size_per_index }
 #            index related settings can be changed in the Graylog web interface on the 'System / Indices' page.
 #            Also see https://docs.graylog.org/docs/index-model#index-set-configuration.
 elasticsearch_max_time_per_index = {{ graylog_elasticsearch_max_time_per_index }}
+
+# Optional upper bound on elasticsearch_max_time_per_index
+{%if graylog_elasticsearch_max_write_index_age | length %}
+elasticsearch_max_write_index_age = {{ graylog_elasticsearch_max_write_index_age }}
+{% else%}
+# elasticsearch_max_write_index_age = 1d
+{% fi %}
 
 # Disable checking the version of Elasticsearch for being compatible with this Graylog release.
 # WARNING: Using Graylog with unsupported and untested versions of Elasticsearch may lead to data loss!
@@ -546,7 +564,6 @@ mongodb_threads_allowed_to_block_multiplier = {{ graylog_mongodb_threads_allowed
 # Default: 0, retry indefinitely until a connection can be established
 mongodb_version_probe_attempts = {{ graylog_mongodb_version_probe_attempts }}
 
-
 # Email transport
 transport_email_enabled = {{ graylog_transport_email_enabled }}
 {% if graylog_transport_email_hostname | length %}transport_email_hostname = {{ graylog_transport_email_hostname }}{% endif %}
@@ -716,6 +733,11 @@ prometheus_exporter_mapping_file_refresh_interval = {{ graylog_prometheus_export
 # Do not perform any preflight checks when starting Graylog
 # Default: false
 skip_preflight_checks = {{ graylog_skip_preflight_checks }}
+
+# Ignore any exceptions encountered when running migrations
+# Use with caution - skipping failing migrations may result in an inconsistent DB state.
+# Default: false
+ignore_migration_failures = {{ graylog_ignore_migration_failures }}
 
 # Custom configuration, if some are needed by plugins.
 {% if graylog_custom_config is defined and graylog_custom_config | length > 0 %}
