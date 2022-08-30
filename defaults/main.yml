@@ -106,10 +106,12 @@ graylog_disable_index_optimization: false
 graylog_index_optimization_max_num_segments: 1
 
 # Retention (these params are in the DB. So they are only used for first initialization.)
+graylog_enabled_index_rotation_strategies: count,size,time
 graylog_rotation_strategy: count
 graylog_elasticsearch_max_docs_per_index: 20000000
 graylog_elasticsearch_max_size_per_index: 1073741824
 graylog_elasticsearch_max_time_per_index: 1d
+graylog_elasticsearch_max_write_index_age: ""
 graylog_elasticsearch_max_number_of_indices: 20
 graylog_retention_strategy: delete
 graylog_no_retention: false  # This one is still used
@@ -214,6 +216,7 @@ graylog_enabled_tls_protocols: TLSv1.2,TLSv1.3
 graylog_allowed_auxiliary_paths: ""
 graylog_skip_preflight_checks: false
 graylog_auto_restart_inputs: false
+graylog_ignore_migration_failures: false
 
 # Plugins
 graylog_plugins_url: []
