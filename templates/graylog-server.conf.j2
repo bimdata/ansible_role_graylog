@@ -304,7 +304,7 @@ elasticsearch_max_time_per_index = {{ graylog_elasticsearch_max_time_per_index }
 elasticsearch_max_write_index_age = {{ graylog_elasticsearch_max_write_index_age }}
 {% else%}
 # elasticsearch_max_write_index_age = 1d
-{% fi %}
+{% endif %}
 
 # Disable checking the version of Elasticsearch for being compatible with this Graylog release.
 # WARNING: Using Graylog with unsupported and untested versions of Elasticsearch may lead to data loss!
