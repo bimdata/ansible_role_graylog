@@ -89,7 +89,7 @@ graylog_elasticsearch_shards: 4
 graylog_elasticsearch_replicas: 0
 graylog_elasticsearch_request_timeout: 1m
 graylog_elasticsearch_index_optimization_timeout: 1h
-graylog_elasticsearch_index_optimization_jobs: 20
+graylog_elasticsearch_index_optimization_jobs: 10
 
 # Others search related
 graylog_allow_leading_wildcard_searches: false
@@ -107,6 +107,7 @@ graylog_index_optimization_max_num_segments: 1
 
 # Retention (these params are in the DB. So they are only used for first initialization.)
 graylog_enabled_index_rotation_strategies: count,size,time
+graylog_max_index_retention_period: ""
 graylog_rotation_strategy: count
 graylog_elasticsearch_max_docs_per_index: 20000000
 graylog_elasticsearch_max_size_per_index: 1073741824

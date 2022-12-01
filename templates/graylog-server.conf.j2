@@ -250,7 +250,11 @@ enabled_index_rotation_strategies = {{ graylog_enabled_index_rotation_strategies
 #
 # If a rotation strategy other than time-based is selected and/or no value is provided for this setting, no upper limit
 # for index retention will be enforced. This is also the default.
+{% if max_index_retention_period | length %}
+max_index_retention_period = {{ graylog_max_index_retention_period }}
+{% else %}
 # max_index_retention_period = P90d
+{% endif %}
 
 # ATTENTION: These settings have been moved to the database in 2.0. When you upgrade, make sure to set these
 #            to your previous 1.x settings so they will be migrated to the database!
@@ -388,7 +392,10 @@ elasticsearch_index_optimization_timeout = {{ graylog_elasticsearch_index_optimi
 
 # Maximum number of concurrently running index optimization (force merge) jobs.
 # If you are using lots of different index sets, you might want to increase that number.
-# Default: 20
+# This value should be set lower than elasticsearch_max_total_connections_per_route, otherwise index optimization
+# could deplete all the client connections to the search server and block new messages ingestion for prolonged
+# periods of time.
+# Default: 10
 elasticsearch_index_optimization_jobs = {{ graylog_elasticsearch_index_optimization_jobs }}
 
 # Time interval for index range information cleanups. This setting defines how often stale index range information
