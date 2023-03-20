@@ -42,19 +42,19 @@
   include_tasks: install_pkgs.yml
   vars:
     _pkg_to_install: "{{ graylog_pkg_name }}"
+  when: not graylog_install_enterprise
+
+- name: "Include tasks to install Graylog enterprise plugins if needed."
+  include_tasks: install_pkgs.yml
+  vars:
+    _pkg_to_install: "{{ graylog_enterprise_pkg_name }}"
+  when: graylog_install_enterprise
 
 - name: "Include tasks to install Graylog integrations plugins if needed."
   include_tasks: install_pkgs.yml
   vars:
     _pkg_to_install: "{{ graylog_intagration_pkg_name }}"
   when: graylog_install_integration
-
-- name: "Include tasks to install Graylog enterprise plugins if needed."
-  include_tasks: install_pkgs.yml
-  loop: "{{ graylog_enterprise_pkg_name }}"
-  loop_control:
-    loop_var: _pkg_to_install
-  when: graylog_install_enterprise
 
 - name: "Configure Graylog service."
   service:
