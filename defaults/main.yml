@@ -4,9 +4,9 @@ graylog_prerequisites:
   - apt-transport-https
   - curl
   - gnupg
-  - default-jre-headless
+  - openjdk-17-jre-headless
 
-graylog_version: 4.3
+graylog_version: 5.0
 graylog_repos_deb_url: "https://packages.graylog2.org/repo/packages/graylog-{{ graylog_version }}-repository_latest.deb"
 graylog_pkg_name: graylog-server
 graylog_pkg_version: ""
@@ -30,7 +30,7 @@ graylog_heap_size: 1g
 graylog_java_path: /usr/bin/java
 # For some reason, java opts are seperate in two different lines in the default
 # Configuration in /etc/default/graylog-server
-graylog_java_opts_1: "-Xms{{ graylog_heap_size }} -Xmx{{ graylog_heap_size }} -XX:NewRatio=1 -server -XX:+ResizeTLAB -XX:-OmitStackTraceInFastThrow"
+graylog_java_opts_1: "-Xms{{ graylog_heap_size }} -Xmx{{ graylog_heap_size }} -server -XX:+UseG1GC -XX:-OmitStackTraceInFastThrow"
 graylog_java_opts_2: "$GRAYLOG_SERVER_JAVA_OPTS -Djdk.tls.acknowledgeCloseNotify=true"
 graylog_server_args: ""
 graylog_command_wrapper: ""
@@ -59,7 +59,7 @@ graylog_http_external_uri: "{{ graylog_http_publish_uri }}"
 graylog_http_enable_cors: true
 graylog_http_enable_gzip: true
 graylog_http_max_header_size: 8192
-graylog_http_thread_pool_size: 16
+graylog_http_thread_pool_size: 64
 graylog_trusted_proxies: "127.0.0.1/32, 0:0:0:0:0:0:0:1/128"  # Reverse proxy that can use X-Forwarded-For
 
 # HTTP.TLS
@@ -127,9 +127,7 @@ graylog_output_module_timeout: 10000
 # Buffer
 graylog_processbuffer_processors: 5
 graylog_outputbuffer_processors: 3
-graylog_outputbuffer_processor_keep_alive_time: 5000
 graylog_outputbuffer_processor_threads_core_pool_size: 3
-graylog_outputbuffer_processor_threads_max_pool_size: 30
 graylog_udp_recvbuffer_sizes: 1048576
 graylog_ring_size: 65536
 graylog_inputbuffer_ring_size: 65536
@@ -158,6 +156,7 @@ graylog_lb_throttle_threshold_percentage: ""
 
 graylog_stream_processing_timeout: 2000
 graylog_stream_processing_max_faults: 3
+graylog_stream_aware_field_types: false
 
 # Introducing master => leader renaming to follow 4.3 change in Graylog.
 graylog_stale_master_timeout: 2000
@@ -167,7 +166,6 @@ graylog_shutdown_timeout: 30000
 # MongoDB
 graylog_mongodb_uri: mongodb://localhost/graylog
 graylog_mongodb_max_connections: 1000
-graylog_mongodb_threads_allowed_to_block_multiplier: 5
 graylog_mongodb_version_probe_attempts: 0
 
 # Mail
@@ -212,7 +210,7 @@ graylog_ldap_connection_timeout: 2000
 # Variable was rename, keep it for retro-compatibility
 graylog_disable_native_system_stats_collector: "{{ graylog_disable_sigar | default(false) }}"
 graylog_dashboard_widget_default_cache_time: "10s"
-graylog_proxied_requests_thread_pool_size: 32
+graylog_proxied_requests_thread_pool_size: 64
 graylog_enabled_tls_protocols: TLSv1.2,TLSv1.3
 graylog_allowed_auxiliary_paths: ""
 graylog_skip_preflight_checks: false

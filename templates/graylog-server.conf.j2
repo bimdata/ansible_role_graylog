@@ -142,6 +142,10 @@ http_enable_tls = {{ graylog_http_enable_tls }}
 # The password to unlock the private key used for securing the HTTP interface.
 {% if graylog_http_tls_key_password | length %}http_tls_key_password = {{ graylog_http_tls_key_password }}{% endif %}
 
+# If set to "true", Graylog will periodically investigate indices to figure out which fields are used in which streams.                            
+# It will make field list in Graylog interface show only fields used in selected streams, but can decrease system performance,                     
+# especially on systems with great number of streams and fields.                                                                                   
+stream_aware_field_types = {{ graylog_stream_aware_field_types }}
 
 # Comma separated list of trusted proxies that are allowed to set the client address with X-Forwarded-For
 # header. May be subnets, or hosts.
@@ -438,21 +442,9 @@ output_fault_penalty_seconds = {{ graylog_output_fault_penalty_seconds }}
 processbuffer_processors = {{ graylog_processbuffer_processors }}
 outputbuffer_processors = {{ graylog_outputbuffer_processors }}
 
-# The following settings (outputbuffer_processor_*) configure the thread pools backing each output buffer processor.
-# See https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ThreadPoolExecutor.html for technical details
-
-# When the number of threads is greater than the core (see outputbuffer_processor_threads_core_pool_size),
-# this is the maximum time in milliseconds that excess idle threads will wait for new tasks before terminating.
-# Default: 5000
-outputbuffer_processor_keep_alive_time = {{ graylog_outputbuffer_processor_keep_alive_time }}
-
-# The number of threads to keep in the pool, even if they are idle, unless allowCoreThreadTimeOut is set
+# The size of the thread pool in the output buffer processor.
 # Default: 3
 outputbuffer_processor_threads_core_pool_size = {{ graylog_outputbuffer_processor_threads_core_pool_size }}
-
-# The maximum number of threads to allow in the pool
-# Default: 30
-outputbuffer_processor_threads_max_pool_size = {{ graylog_outputbuffer_processor_threads_max_pool_size }}
 
 # UDP receive buffer size for all message inputs (e. g. SyslogUDPInput).
 udp_recvbuffer_sizes = {{ graylog_udp_recvbuffer_sizes }}
@@ -560,12 +552,6 @@ mongodb_uri = {{ graylog_mongodb_uri }}
 # Increase this value according to the maximum connections your MongoDB server can handle from a single client
 # if you encounter MongoDB connection problems.
 mongodb_max_connections = {{ graylog_mongodb_max_connections }}
-
-# Number of threads allowed to be blocked by MongoDB connections multiplier. Default: 5
-# If mongodb_max_connections is 100, and mongodb_threads_allowed_to_block_multiplier is 5,
-# then 500 threads can block. More than that and an exception will be thrown.
-# http://api.mongodb.com/java/current/com/mongodb/MongoOptions.html#threadsAllowedToBlockForConnectionMultiplier
-mongodb_threads_allowed_to_block_multiplier = {{ graylog_mongodb_threads_allowed_to_block_multiplier }}
 
 # Maximum number of attempts to connect to MongoDB on boot for the version probe.
 # Default: 0, retry indefinitely until a connection can be established
