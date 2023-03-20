@@ -6,10 +6,18 @@
   changed_when: false
   check_mode: false
 
+# Because of dependancies, we may need to hold/unhold each package each time
 - name: "Unhold {{ _pkg_to_install }} version."
   dpkg_selections:
-    name: "{{ _pkg_to_install }}"
+    name: "{{ item }}"
     selection: install
+  loop: "{{
+        [graylog_enterprise_pkg_name]
+      + [graylog_pkg_name]
+      + [graylog_intagration_pkg_name]
+    }}"
+  loop_control:
+    pause: 2
   when: not graylog_pkg_version_hold or (_pkg_installed_version.stdout and _pkg_installed_version.stdout != graylog_pkg_version)
 
 - name: "Install {{ _pkg_to_install }}"
@@ -19,8 +27,16 @@
     update_cache: true
   notify: "Restart Graylog."
 
+# Because of dependancies, we may need to hold/unhold each package each time
 - name: "Hold {{ _pkg_to_install }} version."
   dpkg_selections:
-    name: "{{ _pkg_to_install }}"
+    name: "{{ item }}"
     selection: "hold"
+  loop: "{{
+        [graylog_enterprise_pkg_name]
+      + [graylog_pkg_name]
+      + [graylog_intagration_pkg_name]
+    }}"
+  loop_control:
+    pause: 2
   when: graylog_pkg_version_hold

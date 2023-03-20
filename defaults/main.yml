@@ -20,9 +20,7 @@ graylog_install_integration: false
 graylog_intagration_pkg_name: "graylog-integrations-plugins"
 
 graylog_install_enterprise: false
-graylog_enterprise_pkg_name:
-  - graylog-enterprise-plugins
-  - graylog-enterprise-integrations-plugins
+graylog_enterprise_pkg_name: graylog-enterprise
 
 # Configuration
 # Used in /etc/default/graylog
