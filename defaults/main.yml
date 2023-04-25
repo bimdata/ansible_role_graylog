@@ -216,5 +216,5 @@ graylog_auto_restart_inputs: false
 graylog_ignore_migration_failures: false
 
 # Plugins
-graylog_plugins_url: []
+graylog_plugins: []
 graylog_custom_config: {}
