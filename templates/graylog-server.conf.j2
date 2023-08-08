@@ -347,7 +347,11 @@ elasticsearch_rotate_empty_index_set={{ graylog_elasticsearch_rotate_empty_index
 # for index retention will be enforced. This is also the default.
 
 # Default: none
+{%if graylog_max_index_retention_period | length %}
 max_index_retention_period = {{ graylog_max_index_retention_period }}
+{% else%}
+# max_index_retention_period = P90d
+{% endif %}
 
 # Optional upper bound on elasticsearch_max_time_per_index
 #
