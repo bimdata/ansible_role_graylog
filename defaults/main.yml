@@ -207,7 +207,7 @@ graylog_prometheus_exporter_bind_address: 127.0.0.1:9833
 graylog_prometheus_exporter_mapping_file_path_core: ""
 graylog_prometheus_exporter_mapping_file_path_custom: ""
 graylog_prometheus_exporter_mapping_file_refresh_interval: 60s
-graylog_integrations_scripts_dir: /usr/share/graylog-server/scriptspts_dir
+graylog_integrations_scripts_dir: /usr/share/graylog-server/scripts
 
 # Others
 graylog_ldap_connection_timeout: 2000
