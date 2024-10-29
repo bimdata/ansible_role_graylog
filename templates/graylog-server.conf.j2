@@ -49,7 +49,6 @@ bin_dir = {{ graylog_bin_dir }}
 
 # Set the data directory here (relative or absolute)
 # This directory is used to store Graylog server state.
-# Default: data
 data_dir = {{ graylog_data_dir }}
 
 # Set plugin directory here (relative or absolute)
@@ -96,7 +95,7 @@ http_publish_uri = {{ graylog_http_publish_uri }}
 #
 # When using Graylog Collector, this URI will be used to receive heartbeat messages and must be accessible for all collectors.
 #
-# This setting can be overriden on a per-request basis with the "X-Graylog-Server-URL" HTTP request header.
+# This setting can be overridden on a per-request basis with the "X-Graylog-Server-URL" HTTP request header.
 #
 # Default: $http_publish_uri
 http_external_uri = {{ graylog_http_external_uri }}
@@ -142,9 +141,9 @@ http_enable_tls = {{ graylog_http_enable_tls }}
 # The password to unlock the private key used for securing the HTTP interface.
 {% if graylog_http_tls_key_password | length %}http_tls_key_password = {{ graylog_http_tls_key_password }}{% endif %}
 
-# If set to "true", Graylog will periodically investigate indices to figure out which fields are used in which streams.                            
-# It will make field list in Graylog interface show only fields used in selected streams, but can decrease system performance,                     
-# especially on systems with great number of streams and fields.                                                                                   
+# If set to "true", Graylog will periodically investigate indices to figure out which fields are used in which streams.
+# It will make field list in Graylog interface show only fields used in selected streams, but can decrease system performance,
+# especially on systems with great number of streams and fields.
 stream_aware_field_types = {{ graylog_stream_aware_field_types }}
 
 # Comma separated list of trusted proxies that are allowed to set the client address with X-Forwarded-For
@@ -271,6 +270,15 @@ elasticsearch_analyzer = {{ graylog_elasticsearch_analyzer }}
 elasticsearch_shards = {{ graylog_elasticsearch_shards }}
 elasticsearch_replicas = {{ graylog_elasticsearch_replicas }}
 
+# Maximum number of attempts to connect to datanode on boot.
+# Default: 0, retry indefinitely with the given delay until a connection could be established
+datanode_startup_connection_attempts = {{ graylog_datanode_startup_connection_attempts }}
+
+# Waiting time in between connection attempts for datanode_startup_connection_attempts
+#
+# Default: 5s
+datanode_startup_connection_delay = {{ graylog_datanode_startup_connection_delay }}
+
 # Disable the optimization of Elasticsearch indices after index cycling. This may take some load from Elasticsearch
 # on heavily used systems with large indices, but it will decrease search performance. The default is to optimize
 # cycled indices.
@@ -371,6 +379,14 @@ no_retention = {{ graylog_no_retention }}
 #
 retention_strategy = {{ graylog_retention_strategy }}
 
+# This configuration list limits the retention strategies available for user configuration via the UI
+# The following strategies can be disabled:
+#   - delete # Deletes the index completely (Default)
+#   - close # Closes the index and hides it from the system. Can be re-opened later.
+#   - none #  No operation is performed. The index stays open. (Not recommended)
+# WARNING: At least one strategy must be enabled. Be careful when extending this list on existing installations!
+disabled_retention_strategies = {{ graylog_disabled_retention_strategies }}
+
 # How many indices do you want to keep for the delete and close retention types?
 #
 elasticsearch_max_number_of_indices = {{ graylog_elasticsearch_max_number_of_indices }}
@@ -387,6 +403,12 @@ allow_leading_wildcard_searches = {{ graylog_allow_leading_wildcard_searches }}
 # Do you want to allow searches to be highlighted? Depending on the size of your messages this can be memory hungry and
 # should only be enabled after making sure your Elasticsearch cluster has enough memory.
 allow_highlighting = {{ graylog_allow_highlighting }}
+
+# Sets field value suggestion mode. The possible values are:
+#  1. "off" - field value suggestions are turned off
+#  2. "textual_only" - field values are suggested only for textual fields
+#  3. "on" (default) - field values are suggested for all field types, even the types where suggestions are inefficient performance-wise
+field_value_suggestion_mode = {{ graylog_field_value_suggestion_mode }}
 
 # Global timeout for index optimization (force merge) requests.
 # Default: 1h
@@ -405,11 +427,13 @@ elasticsearch_index_optimization_jobs = {{ graylog_elasticsearch_index_optimizat
 # Default: 1h
 index_ranges_cleanup_interval = {{ graylog_index_ranges_cleanup_interval }}
 
-# Batch size for the Elasticsearch output. This is the maximum (!) number of messages the Elasticsearch output
-# module will get at once and write to Elasticsearch in a batch call. If the configured batch size has not been
-# reached within output_flush_interval seconds, everything that is available will be flushed at once. Remember
-# that every outputbuffer processor manages its own batch and performs its own batch write calls.
-# ("outputbuffer_processors" variable)
+# Batch size for the Elasticsearch output. This is the maximum accumulated size of messages that are written to
+# Elasticsearch in a batch call. If the configured batch size has not been reached within output_flush_interval seconds,
+# everything that is available will be flushed at once.
+# Each output buffer processor has to keep an entire batch of messages in memory until it has been sent to
+# Elasticsearch, so increasing this value will also increase the memory requirements of the Graylog server.
+# Batch sizes can be specified in data units (e.g. bytes, kilobytes, megabytes) or as an absolute number of messages.
+# Example: output_batch_size = 10mb
 output_batch_size = {{ graylog_output_batch_size }}
 
 # Flush interval (in seconds) for the Elasticsearch output. This is the maximum amount of time between two
@@ -423,9 +447,18 @@ output_flush_interval = {{ graylog_output_flush_interval }}
 output_fault_count_threshold = {{ graylog_output_fault_count_threshold }}
 output_fault_penalty_seconds = {{ graylog_output_fault_penalty_seconds }}
 
-# The number of parallel running processors.
-# Raise this number if your buffers are filling up.
+# Number of process buffer processors running in parallel.
+# By default, the value will be determined automatically based on the number of CPU cores available to the JVM, using
+# the formula (<#cores> * 0.36 + 0.625) rounded to the nearest integer.
+# Set this value explicitly to override the dynamically calculated value. Try raising the number if your buffers are
+# filling up.
 processbuffer_processors = {{ graylog_processbuffer_processors }}
+
+# Number of output buffer processors running in parallel.
+# By default, the value will be determined automatically based on the number of CPU cores available to the JVM, using
+# the formula (<#cores> * 0.162 + 0.625) rounded to the nearest integer.
+# Set this value explicitly to override the dynamically calculated value. Try raising the number if your buffers are
+# filling up.
 outputbuffer_processors = {{ graylog_outputbuffer_processors }}
 
 # The size of the thread pool in the output buffer processor.
@@ -453,8 +486,10 @@ processor_wait_strategy = {{ graylog_processor_wait_strategy }}
 ring_size = {{ graylog_ring_size }}
 
 inputbuffer_ring_size = {{ graylog_inputbuffer_ring_size }}
-inputbuffer_processors = {{ graylog_inputbuffer_processors }}
 inputbuffer_wait_strategy = {{ graylog_inputbuffer_wait_strategy }}
+
+# Number of input buffer processors running in parallel.
+inputbuffer_processors = {{ graylog_inputbuffer_processors }}
 
 # Manually stopped inputs are no longer auto-restarted. To re-enable the previous behavior, set auto_restart_inputs to true.
 auto_restart_inputs = {{ graylog_auto_restart_inputs }}
@@ -469,6 +504,7 @@ message_journal_enabled = {{ graylog_message_journal_enabled }}
 #   If you create a separate partition for the journal files and use a file system creating directories like 'lost+found'
 #   in the root directory, you need to create a sub directory for your journal.
 #   Otherwise Graylog will log an error message that the journal is corrupt and Graylog will not start.
+# Default: <data_dir>/journal
 message_journal_dir = {{ graylog_message_journal_dir }}
 
 # Journal hold messages before they could be written to Elasticsearch.
@@ -640,6 +676,7 @@ processing_status_journal_write_rate_threshold = {{ graylog_processing_status_jo
 content_packs_loader_enabled = {{ graylog_content_packs_loader_enabled }}
 
 # The directory which contains content packs which should be loaded on the first start of Graylog.
+# Default: <data_dir>/contentpacks
 {% if graylog_content_packs_dir | length %}content_packs_dir = {{ graylog_content_packs_dir }}{% endif %}
 
 # A comma-separated list of content packs (files in "content_packs_dir") which should be applied on
@@ -676,6 +713,9 @@ prometheus_exporter_bind_address = {{ graylog_prometheus_exporter_bind_address }
 # Default: 60s
 prometheus_exporter_mapping_file_refresh_interval = {{ graylog_prometheus_exporter_mapping_file_refresh_interval }}
 
+# An absolute path where scripts are permitted to be executed from.
+integrations_scripts_dir = {{ graylog_integrations_scripts_dir }}
+
 # Optional allowed paths for Graylog data files. If provided, certain operations in Graylog will only be permitted
 # if the data file(s) are located in the specified paths (for example, with the CSV File lookup adapter).
 # All subdirectories of indicated paths are allowed by default. This Provides an additional layer of security,
@@ -691,12 +731,28 @@ skip_preflight_checks = {{ graylog_skip_preflight_checks }}
 # Default: false
 ignore_migration_failures = {{ graylog_ignore_migration_failures }}
 
-# Some configuration that exists but not in the default config file
-{% if graylog_version is version('5.1', '>=') | bool %}
-{% if graylog_disabled_retention_strategies | length %}
-disabled_retention_strategies = {{ graylog_disabled_retention_strategies }}
-{% endif %}
-{% endif %}
+# Comma-separated list of notification types which should not emit a system event.
+# Default: SIDECAR_STATUS_UNKNOWN which would create a new event whenever the status of a sidecar becomes "Unknown"
+system_event_excluded_types = {{ graylog_system_event_excluded_types }}
+
+# RSS settings for content stream
+content_stream_rss_url = {{ graylog_content_stream_rss_url }}
+content_stream_refresh_interval = {{ graylog_content_stream_refresh_interval }}
+
+# Maximum value that can be set for an event limit.
+# Default: 1000
+event_definition_max_event_limit = {{ graylog_event_definition_max_event_limit }}
+
+# Optional limits on scheduling concurrency by job type. No more than the specified number of worker
+# threads will be executing jobs of the specified type across the entire cluster.
+# Default: no limitation
+# Note: Monitor job queue metrics to avoid excessive backlog of unprocessed jobs when using this setting!
+# Available job types in Graylog Open:
+#   check-for-cert-renewal-execution-v1
+#   event-processor-execution-v1
+#   notification-execution-v1
+{% if graylog_job_scheduler_concurrency_limits | length %}job_scheduler_concurrency_limits = {{ graylog_job_scheduler_concurrency_limits }}{% endif %}
+
 
 # Some deprecated configuration that could be used for older version of graylog
 {% if graylog_version is version('5.1', '<') | bool %}
