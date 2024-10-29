@@ -6,7 +6,7 @@ graylog_prerequisites:
   - gnupg
   - openjdk-17-jre-headless
 
-graylog_version: 5.1
+graylog_version: 6.1
 graylog_repos_deb_url: "https://packages.graylog2.org/repo/packages/graylog-{{ graylog_version }}-repository_latest.deb"
 graylog_pkg_name: graylog-server
 graylog_pkg_version: ""
@@ -116,6 +116,8 @@ graylog_elasticsearch_max_number_of_indices: 20
 graylog_retention_strategy: delete
 graylog_no_retention: false  # This one is still used
 graylog_disabled_retention_strategies: ""
+graylog_datanode_startup_connection_attempts: 0
+graylog_datanode_startup_connection_delay: 5s
 
 # Output
 graylog_output_batch_size: 500
@@ -205,6 +207,7 @@ graylog_prometheus_exporter_bind_address: 127.0.0.1:9833
 graylog_prometheus_exporter_mapping_file_path_core: ""
 graylog_prometheus_exporter_mapping_file_path_custom: ""
 graylog_prometheus_exporter_mapping_file_refresh_interval: 60s
+graylog_integrations_scrigraylog_integrations_scripts_dir: /usr/share/graylog-server/scriptspts_dir:
 
 # Others
 graylog_ldap_connection_timeout: 2000
@@ -218,6 +221,12 @@ graylog_allowed_auxiliary_paths: ""
 graylog_skip_preflight_checks: false
 graylog_auto_restart_inputs: false
 graylog_ignore_migration_failures: false
+graylog_field_value_suggestion_mode: "on"
+graylog_system_event_excluded_types: SIDECAR_STATUS_UNKNOWN
+graylog_content_stream_rss_url: https://www.graylog.org/post
+graylog_content_stream_refresh_interval: 7d
+graylog_event_definition_max_event_limit: 1000
+graylog_job_scheduler_concurrency_limits: ""
 
 # Removed in current version
 graylog_gc_warning_threshold: 1s
